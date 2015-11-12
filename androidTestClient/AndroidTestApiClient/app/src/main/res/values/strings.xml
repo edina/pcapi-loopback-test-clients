@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AndroidTestApiClient</string>
+
+
+        <string name="save_record_content"><![CDATA[
+        <h3>Saves a Record</h3>
+        <p>This form creates a new record model on the server.
+
+    ]]></string>
 </resources>
