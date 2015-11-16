@@ -7,4 +7,9 @@
         <p>This form creates a new record model on the server.
 
     ]]></string>
+            <string name="upload_file_content"><![CDATA[
+        <h3>Saves a Record</h3>
+        <p>Uploads an image to loopback</p>
+
+    ]]></string>
 </resources>
