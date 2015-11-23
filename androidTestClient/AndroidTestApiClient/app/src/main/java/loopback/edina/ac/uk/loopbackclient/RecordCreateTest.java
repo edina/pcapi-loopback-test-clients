@@ -13,6 +13,7 @@ import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.ModelRepository;
 import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
+import com.strongloop.android.remoting.BeanUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +28,11 @@ import loopback.edina.ac.uk.loopbackclient.util.HtmlFragment;
 public class RecordCreateTest extends HtmlFragment {
 
     private final static String FEATURE = "Feature";
+    public static final String POINT = "Point";
+    public static final String EDITOR = "editor";
+    public static final String FIELDS = "fields";
+    public static final String GEOMETRY_TYPE = "type";
+    public static final String COORDINATES = "coordinates";
 
     /**
      * This custom subclass of Model is the closest thing to a "schema" the Note model has.
@@ -92,7 +98,7 @@ public class RecordCreateTest extends HtmlFragment {
 	 */
     public static class RecordModel extends Model {
         private String name;
-        private Map properties;
+        private Properties properties;
         private String type;
         private Map geometry;
         private String id;
@@ -114,11 +120,11 @@ public class RecordCreateTest extends HtmlFragment {
             this.name = name;
         }
 
-        public Map getProperties() {
+        public Properties getProperties() {
             return properties;
         }
 
-        public void setProperties(Map properties) {
+        public void setProperties(Properties properties) {
             this.properties = properties;
         }
 
@@ -136,6 +142,19 @@ public class RecordCreateTest extends HtmlFragment {
 
         public void setGeometry(Map geometry) {
             this.geometry = geometry;
+        }
+
+
+        /**
+         * Converts the Model (and all of its Java Bean properties) into a
+         * {@link java.util.Map}.
+         */
+        public Map<String, ? extends Object> toMap() {
+            Map<String, Object> map = new HashMap<>();
+            //map.putAll(overflow);
+            map.put("id", getId());
+            map.putAll(BeanUtil.getProperties(this, false, true));
+            return map;
         }
     }
 
@@ -215,15 +234,14 @@ public class RecordCreateTest extends HtmlFragment {
         model.setId(getRecordId());
         model.setName(getRecordName());
         model.setType(FEATURE);
-        Map properties = new HashMap<String,Object>();
+        Properties properties = new Properties();
 
-        properties.put("editor", getRecordEditor());
-        properties.put("fields", new String[]{});
-
+        properties.setEditor(getRecordEditor());
+        properties.setTimestamp(getRecordTimestamp());
         model.setProperties(properties);
         Map<String,Object> geometry = new HashMap<String,Object>();
-        geometry.put("type", "Point");
-        geometry.put("coordinates",  new Double[]{-3.186693670396864, 55.93634725525547, 100.0});
+        geometry.put(GEOMETRY_TYPE, POINT);
+        geometry.put(COORDINATES,  new Double[]{-3.186693670396864, 55.93634725525547, 100.0});
 
         model.setGeometry(geometry);
 
@@ -288,8 +306,28 @@ public class RecordCreateTest extends HtmlFragment {
         return widget.getText().toString();
     }
 
+    private String getRecordTimestamp() {
+        final EditText widget = (EditText) getRootView().findViewById(R.id.editTimestamp);
+        return widget.getText().toString();
+    }
+
     private String getRecordEditor() {
         final EditText widget = (EditText) getRootView().findViewById(R.id.editEditor);
+        return widget.getText().toString();
+    }
+
+    private String getRecordFieldOneId() {
+        final EditText widget = (EditText) getRootView().findViewById(R.id.editFieldOneId);
+        return widget.getText().toString();
+    }
+
+    private String getRecordFieldOneLabel() {
+        final EditText widget = (EditText) getRootView().findViewById(R.id.editFieldOneLabel);
+        return widget.getText().toString();
+    }
+
+    private String getRecordFieldOneVal() {
+        final EditText widget = (EditText) getRootView().findViewById(R.id.editFieldOneVal);
         return widget.getText().toString();
     }
 

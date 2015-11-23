@@ -32,6 +32,7 @@ public class SlidePresenterActivity  extends FragmentActivity {
 
     private List<Fragment> createSlideFragments() {
         final List<Fragment> fragments = new Vector<Fragment>();
+        fragments.add(new ParseSdkTest());
         fragments.add(new RecordCreateTest());
         fragments.add(new UploadBinaryTest());
         return fragments;

@@ -12,4 +12,9 @@
         <p>Uploads an image to loopback</p>
 
     ]]></string>
+      <string name="parse_sdk_content"><![CDATA[
+        <h3>Testing upload to parse </h3>
+        <p>Uploads and retrieval from parse</p>
+
+    ]]></string>
 </resources>
