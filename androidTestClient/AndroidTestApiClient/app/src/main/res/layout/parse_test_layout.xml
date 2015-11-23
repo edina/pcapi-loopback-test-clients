@@ -20,6 +20,12 @@
         android:layout_gravity="center_horizontal"
         android:text="submit record" />
 
+    <Button
+        android:id="@+id/retrieveRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="retrieve record" />
 
 
 </LinearLayout>

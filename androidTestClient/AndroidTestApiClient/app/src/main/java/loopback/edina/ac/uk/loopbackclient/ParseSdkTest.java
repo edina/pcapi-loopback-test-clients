@@ -1,13 +1,20 @@
 package loopback.edina.ac.uk.loopbackclient;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import loopback.edina.ac.uk.loopbackclient.util.HtmlFragment;
 
@@ -15,6 +22,10 @@ import loopback.edina.ac.uk.loopbackclient.util.HtmlFragment;
  * Created by murrayking on 23/11/2015.
  */
 public class ParseSdkTest extends HtmlFragment {
+    private static final String TAG = "ParseSdkTest";
+
+    private String objectId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,13 +48,74 @@ public class ParseSdkTest extends HtmlFragment {
                 sendRequest();
             }
         });
+
+        final Button retrieveBut = (Button) getRootView().findViewById(R.id.retrieveRequest);
+        retrieveBut.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                receiveRequest();
+            }
+        });
     }
 
     private void sendRequest() {
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("test" , getRecordFieldOneLabel());
-        testObject.saveInBackground();
 
+        final ParseObject po = new ParseObject("Record");
+        po.put("field_one", getRecordFieldOneLabel());
+
+
+        po.saveInBackground(new SaveCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Saved successfully.
+                    Log.d(TAG, "User update saved!");
+                    //temp.setParseObjectId(po.getObjectId());
+                    objectId = po.getObjectId();
+                    Log.d(TAG, "The object id (from User) is: " + objectId);
+
+                } else {
+                    // The save failed.
+                    Log.d(TAG, "User update error: " + e);
+                }
+            }
+        });
+
+    }
+
+    private void receiveRequest() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Record");
+        query.getInBackground(objectId, new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    // object will be your game score
+                    String fieldOneContent = object.getString("field_one");
+                    new AlertDialog.Builder(ParseSdkTest.this.getContext())
+                            .setTitle("Retrieved Object ")
+                            .setMessage("fieldOneContent :" + fieldOneContent)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                }
+                            })
+
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
+                } else {
+                    new AlertDialog.Builder(ParseSdkTest.this.getContext())
+                            .setTitle("Error Retrieving Object ")
+                            .setMessage(" error :" + e.getMessage())
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                }
+                            })
+
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
+                }
+            }
+        });
     }
 
     private String getRecordFieldOneLabel() {
