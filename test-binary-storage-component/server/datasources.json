@@ -8,5 +8,9 @@
     "connector": "loopback-component-storage",
     "provider": "filesystem",
     "root": "./server/storage"
+  },
+  "mongo": {
+    "name": "mongo",
+    "connector": "mongodb"
   }
 }

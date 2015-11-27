@@ -35,5 +35,9 @@
   "form": {
     "dataSource": "db",
     "public": true
+  },
+  "obj": {
+    "dataSource": "mongo",
+    "public": true
   }
 }
